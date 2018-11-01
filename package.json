@@ -1,0 +1,49 @@
+{
+  "name": "divorce",
+  "description": "A lightweight Promises/A+ compliant library.",
+  "version": "0.1.0",
+  "author": "coopersemantics",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coopersemantics/divorce.git"
+  },
+  "homepage": "https://github.com/coopersemantics/divorce",
+  "bugs": {
+    "url": "https://github.com/coopersemantics/divorce/issues"
+  },
+  "keywords": [
+    "divorce",
+    "promise",
+    "promises",
+    "promises/a+",
+    "promises-aplus",
+    "async"
+  ],
+  "main": "dist/divorce.js",
+  "module": "dist/divorce.mjs",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "preversion": "npm test",
+    "version": "changelog -x build,docs,style && git add CHANGELOG.md -A dist",
+    "build": "rollup -c",
+    "pretest": "npm run build",
+    "test": "npm run test:lint && npm run test:aplus",
+    "test:lint": "eslint {lib,test}/*.js *.js",
+    "test:aplus": "promises-aplus-tests test/adapter.js"
+  },
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "generate-changelog": "^1.7.1",
+    "promises-aplus-tests": "^2.1.2",
+    "rollup": "^0.66.6",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-license": "^0.7.0",
+    "rollup-plugin-node-resolve": "^3.4.0"
+  },
+  "dependencies": {
+    "next-tick": "^1.0.0"
+  }
+}
