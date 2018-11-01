@@ -68,7 +68,7 @@ The `catch()` method returns a `Divorce` object and deals with rejected cases on
 
 #### Parameters
 
-`onRejected` - A function called when the `Divorce` object is rejected. The function has one argument: `reason`--The rejection reason.
+`onRejected` - A function called when the `Divorce` object is rejected. The function has one argument: `reason`--the rejection reason.
 
 #### Syntax
 

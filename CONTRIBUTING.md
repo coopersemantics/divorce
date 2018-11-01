@@ -49,7 +49,7 @@ Commit message summaries must follow the following format:
 The subject contains a succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
-* don't capitalize the first letter
+* do not capitalize the first letter
 * no dot (.) at the end
 
 Following the subject, a `Github` issue number must be added, e.g.,
@@ -61,7 +61,7 @@ fix: cannot call method "split" of undefined TypeError (#840)
 ## Submit a Pull Request
 
 When your commit is ready to be reviewed, please submit a [pull request](https://help.github.com/articles/creating-a-pull-request).
-Push the topic branch to your fork and then use one of the several options in `GitHub`'s interface to initiate the request. Please do not commit `dist` files. `dist` files can only be committed by `Divorce` core members.
+Push the topic branch to your fork and then use one of the several options in `GitHub`'s interface to initiate the request. Please do not commit `dist` files.
 
 It is generally a good practice to file an issue explaining your idea before writing code or submitting a pull request--especially when introducing new features.
 
