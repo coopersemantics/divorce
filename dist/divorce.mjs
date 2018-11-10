@@ -1,5 +1,5 @@
 /**
- * divorce v0.1.0
+ * divorce v0.1.1
  * Copyright 2018 coopersemantics
  * Available under MIT license <https://github.com/coopersemantics/divorce/blob/master/LICENSE>
  */
@@ -120,9 +120,9 @@ const rejectPromise = (promise, reason) => {
 
 /**
  * @method
- * @description The promise resolution procedure is an abstract operation taking as input a promise
- * and a value. If value is a thenable, it attempts to make promise adopt the state of value, under the
- * assumption that value behaves at least somewhat like a promise. Otherwise, it fulfills promise with the value.
+ * @description The `promise` resolution procedure is an abstract operation taking as input a `promise`
+ * and a `value`. If `value` is a thenable, it attempts to make `promise` adopt the state of `value`, under the
+ * assumption that `value` behaves at least somewhat like a `promise`. Otherwise, it fulfills `promise` with the `value`.
  * @param {Object} promise
  * @param {*} value
  */
@@ -133,8 +133,8 @@ const resolutionProcedure = (promise, value) => {
 
   if (value instanceof promise.constructor) {
     return value.then(
-      (v) => resolvePromise(promise, v),
-      (r) => rejectPromise(promise, r)
+      (val) => resolvePromise(promise, val),
+      (rej) => rejectPromise(promise, rej)
     );
   }
 
@@ -159,15 +159,15 @@ const resolutionProcedure = (promise, value) => {
   try {
     then.call(
       value,
-      (v) => {
+      (val) => {
         if (!isCalled) {
-          resolutionProcedure(promise, v);
+          resolutionProcedure(promise, val);
           isCalled = true;
         }
       },
-      (r) => {
+      (rej) => {
         if (!isCalled) {
-          rejectPromise(promise, r);
+          rejectPromise(promise, rej);
           isCalled = true;
         }
       }
@@ -187,15 +187,15 @@ class Divorce {
    * @constructor
    * @description Represents the eventual completion (or failure) of an
    * asynchronous operation and its resulting value.
-   * @param {Function} resolver
+   * @param {Function} executor
    */
-  constructor (resolver) {
+  constructor (executor) {
     this[promiseStatus] = PENDING;
     this[promiseValue] = undefined;
     this[promiseQueue] = [];
 
     try {
-      resolver(
+      executor(
         value => resolutionProcedure(this, value),
         reason => rejectPromise(this, reason)
       );
@@ -206,7 +206,7 @@ class Divorce {
 
   /**
    * @method
-   * @description Returns a `Divorce` object that takes two arguments:
+   * @description Returns a `Divorce` object that takes up to two arguments:
    * callback functions for the success and failure cases of the `Divorce` object.
    * @param {Function} onFulfilled
    * @param {Function} [onRejected]
@@ -214,13 +214,13 @@ class Divorce {
    */
   then (onFulfilled, onRejected) {
     return new Divorce((resolve, reject) => {
-      const onFulfilledHandler = wrapHandler(
+      const onFulfilledHandler = executeOnNextTick(
         !isFunction(onFulfilled) ? (value) => value : onFulfilled,
         this,
         resolve,
         reject
       );
-      const onRejectedHandler = wrapHandler(
+      const onRejectedHandler = executeOnNextTick(
         !isFunction(onRejected) ? (reason) => { throw reason; } : onRejected,
         this,
         resolve,
@@ -250,9 +250,10 @@ class Divorce {
   }
 
   /**
-   * @property {String}
+   * @method
    * @description Default string description of the object--accessed internally
    * by the `Object.prototype.toString()` method.
+   * @returns {String}
    */
   get [Symbol.toStringTag] () {
     return 'Promise';
@@ -279,7 +280,7 @@ class Divorce {
   }
 }
 
-const wrapHandler = (handler, promise, resolve, reject) =>
+const executeOnNextTick = (handler, promise, resolve, reject) =>
   () => {
     nextTick(() => {
       try {

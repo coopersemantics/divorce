@@ -1,7 +1,7 @@
 {
   "name": "divorce",
   "description": "A lightweight Promises/A+ compliant library.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "coopersemantics",
   "license": "MIT",
   "repository": {
